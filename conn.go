@@ -130,7 +130,7 @@ func (c *Conn) Execute(m Message) ([]Message, error) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
-	req, err := c.lockedSend(m)
+	_, err := c.lockedSend(m)
 	if err != nil {
 		return nil, err
 	}
@@ -140,9 +140,10 @@ func (c *Conn) Execute(m Message) ([]Message, error) {
 		return nil, err
 	}
 
-	if err := Validate(req, res); err != nil {
-		return nil, err
-	}
+	// [blakezyli] We skip Validate for vtoa
+	//if err := Validate(req, res); err != nil {
+	//	return nil, err
+	//}
 
 	return res, nil
 }
